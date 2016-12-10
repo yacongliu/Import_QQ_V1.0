@@ -84,6 +84,7 @@ h1 {
 	<!--content start-->
 	<div class="content">
 		<a href="#" class="c-btn">上传批量数据</a>
+		<div class="showres"></div>
 		<div class="c-con">
 			<!-- <div class="c-list">
 				<p>第一节课：太好了。。。</p>
@@ -106,35 +107,40 @@ h1 {
 	<!--end content-->
 
 	<!-- js -->
-	<script type="text/javascript" src="js/jquery-3.1.0.min.js""></script>
+	<script type="text/javascript" src="js/jquery-3.1.0.min.js"></script>
 	<script type="text/javascript">
 		$(function() {
 			console.info("ok")
 
 			$(".c-btn").click(
 					function() {
-						$
-								.ajax({
-									type : "POST",
-									url : "data.jsp",
-									success : function(data) {
-										var jdata = eval("(" + data + ")");
-										console.log(jdata);
-										var html = "";
-										for (var i = 0; i < jdata.length; i++) {
-											console.info(jdata[i].title);
-											console.info(jdata[i].desc);
-											html += "<div class='c-list'>"
-													+ " <p>第一节课名称："
-													+ jdata[i].title + "</p>"
-													+ " <p>第一节课描述："
-													+ jdata[i].desc + "</p>"
-													+ "</div>";
-										}
-										console.info(html);
-										$(".c-con").html(html);
-									}
-								});
+						$.ajax({
+							type : "POST",
+							url : "data.jsp",
+							beforeSend:function(XMLHttpRequest){
+								 $(".c-con").append("<div><img src='./images/loading.gif'/></div>"); 
+							},
+							complete(XMLHttpRequest, textStatus){
+								alert("解析成功！");
+							},
+							success : function(data) {
+								var jdata = eval("(" + data + ")");
+								console.log(jdata);
+								var html = "";
+								for (var i = 0; i < jdata.length; i++) {
+									console.info(jdata[i].title);
+									console.info(jdata[i].desc);
+									html += "<div class='c-list'>"
+											+ " <p>第一节课名称："
+											+ jdata[i].title + "</p>"
+											+ " <p>第一节课描述："
+											+ jdata[i].desc + "</p>"
+											+ "</div>";
+								}
+								console.info(html);
+								$(".c-con").html(html);
+							}
+						});
 					});
 		});
 	</script>
